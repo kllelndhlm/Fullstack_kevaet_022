@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Name = ({ person }) => {
   return (
@@ -6,20 +7,31 @@ const Name = ({ person }) => {
   )
 }
 
-const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas',
-      id: 'Arto Hellas',
-      number: '040-1231244' }
-  ]) 
-  const [newName, setNewName] = useState(
-    'a new name...'
+const Numbers = ({ persons }) => {
+  return (
+    <div>
+      {persons.map(person => 
+        <Name key={person.id} person={person} />
+      )}
+    </div>
   )
-  const [newNumber, setNewNumber] = useState(
-    'a new number...'
-  ) 
-  const addName = (event) => 
-    {event.preventDefault()
+}
+
+const App = () => {
+  const [persons, setPersons] = useState([]) 
+  const [newName, setNewName] = useState('a new name...')
+  const [newNumber, setNewNumber] = useState('a new number...')
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+    }, [])
+
+  const addName = (event) => {
+    event.preventDefault()
     const nameObject = {
       name: newName,
       id: newName,
@@ -61,11 +73,7 @@ const App = () => {
         <button type="submit">add</button>
       </form>
       <h2>Numbers</h2>
-      
-        {persons.map(person => 
-          <Name key={person.id} person={person} />
-        )}
-      
+      <Numbers persons={persons} />
     </div>
   )
 
