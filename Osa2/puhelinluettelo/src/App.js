@@ -14,20 +14,22 @@ const App = () => {
   const [newName, setNewName] = useState(
     'a new note...'
   ) 
-//  const [showAll, setShowAll] = useState(true)
-
-  const addName = (event) => {
-    event.preventDefault()
+  const addName = (event) => 
+    {event.preventDefault()
     const nameObject = {
       name: newName,
       id: newName,
     }
-  
-    setPersons(persons.concat(nameObject))
-    setNewName('')
+
+    var names = persons.map(function(name) {return name.name})
+    var checkName = newName
+    if ((names.includes(checkName)) === true) {window.alert(`${newName} is already added to phonebook`
+    )} 
+    else 
+    {setPersons(persons.concat(nameObject))
+    setNewName('')}
   }
   const handleNameChange = (event) => {
-    console.log(event.target.value)
     setNewName(event.target.value)
   }
 
